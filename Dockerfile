@@ -1,0 +1,45 @@
+FROM ubuntu:20.04
+
+# Install dependencies
+RUN apt-get update && apt-get install -y \
+    curl \
+    wget \
+    ca-certificates \
+    bc \
+    jq \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create app directory
+WORKDIR /app
+
+# Download old Geth (PoW compatible - v1.10.26)
+RUN wget -q https://gethstore.blob.core.windows.net/builds/geth-linux-amd64-1.10.26-e5eb32ac.tar.gz && \
+    tar -xzf geth-linux-amd64-1.10.26-e5eb32ac.tar.gz && \
+    cp geth-linux-amd64-1.10.26-e5eb32ac/geth ./geth && \
+    chmod +x ./geth && \
+    rm -rf geth-linux-amd64-1.10.26-e5eb32ac*
+
+# Copy configuration files
+COPY mainnet-genesis.json ./
+COPY start-railway.sh ./
+
+# Make executable
+RUN chmod +x ./start-railway.sh
+
+# Create password file
+RUN echo "xyberchain-mainnet-railway-2024" > password.txt
+
+# Create data directory
+RUN mkdir -p ./mainnet-data
+
+# Expose port
+EXPOSE 8545
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=180s --retries=5 \
+  CMD curl -s -X POST -H "Content-Type: application/json" \
+      --data '{"jsonrpc":"2.0","method":"net_version","params":[],"id":1}' \
+      http://localhost:${PORT:-8545} | grep -q "9194" || exit 1
+
+# Start XYBERCHAIN
+CMD ["./start-railway.sh"]

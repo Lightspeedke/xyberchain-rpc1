@@ -1,0 +1,18 @@
+=============== Jul 19, 2025 (EAT) ===============
+13:37:33.775787 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+13:37:33.797465 db@open opening
+13:37:33.803842 version@stat F·[] S·0B[] Sc·[]
+13:37:33.808110 db@janitor F·2 G·0
+13:37:33.808185 db@open done T·10.672277ms
+13:37:33.888509 db@close closing
+13:37:33.888698 db@close done T·186.692µs
+=============== Jul 19, 2025 (EAT) ===============
+13:37:38.204480 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+13:37:38.206297 version@stat F·[] S·0B[] Sc·[]
+13:37:38.206419 db@open opening
+13:37:38.206662 journal@recovery F·1
+13:37:38.222279 journal@recovery recovering @1
+13:37:38.231385 memdb@flush created L0@2 N·19 S·1KiB "H\x13+..\x1e*.,v12":"۴\xf9..:\xf9\xec,v8"
+13:37:38.253191 version@stat F·[1] S·1KiB[1KiB] Sc·[0.25]
+13:37:38.272741 db@janitor F·3 G·0
+13:37:38.272873 db@open done T·66.408829ms
