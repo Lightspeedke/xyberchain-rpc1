@@ -8,8 +8,8 @@ PORT=${PORT:-8545}
 DATADIR="./mainnet-data"
 NETWORK_ID=9194
 
-# Use Railway environment password or default
-echo "${GETH_PASSWORD:-xyberchain-mainnet-railway-2024}" > password.txt
+# Create a stronger password file
+echo "${GETH_PASSWORD:-xyberchain-mainnet-railway-secure-2024}" > password.txt
 
 # Initialize if needed
 if [ ! -d "$DATADIR/geth" ]; then
@@ -21,25 +21,26 @@ if [ ! -d "$DATADIR/geth" ]; then
     ./geth --datadir $DATADIR account import --password password.txt temp_key.txt
     rm temp_key.txt
     
-    echo "✅ Initialization complete!"
+    echo "✅ XYBERCHAIN initialization complete!"
 fi
 
-echo "🚀 Starting XYBERCHAIN MAINNET on Railway..."
-echo "Port: $PORT"
-echo "Network ID: $NETWORK_ID"
-echo "Pre-funded: 0x90f8bf6a479f320ead074411a4b0e7944ea8c9c1"
-echo "Balance: 10,000 XYB"
+echo "🚀 Starting XYBERCHAIN MAINNET..."
+echo "📡 RPC Port: $PORT"
+echo "🏭 Mining Address: 0x90f8bf6a479f320ead074411a4b0e7944ea8c9c1"
+echo "💰 Pre-funded Balance: 10,000+ XYB"
+echo "⛏️  Mining: Enabled"
+echo "🔓 Account: Auto-unlocked"
 echo ""
 
-# Start with Railway-optimized settings
-./geth --datadir $DATADIR \
+# Start with enhanced unlock settings
+exec ./geth --datadir $DATADIR \
     --networkid $NETWORK_ID \
     --http \
     --http.addr "0.0.0.0" \
     --http.port $PORT \
     --http.corsdomain "*" \
     --http.vhosts "*" \
-    --http.api "eth,net,web3,personal,admin,miner,txpool" \
+    --http.api "eth,net,web3,personal,admin,miner,txpool,debug" \
     --mine \
     --miner.threads 1 \
     --miner.etherbase "0x90f8bf6a479f320ead074411a4b0e7944ea8c9c1" \
@@ -49,5 +50,7 @@ echo ""
     --maxpeers 25 \
     --verbosity 3 \
     --syncmode "full" \
-    --cache 128 \
-    --nodiscover
+    --cache 256 \
+    --nodiscover \
+    --miner.gasprice 1000000000 \
+    --txpool.pricelimit 0

@@ -2,19 +2,14 @@
 
 echo "🚂 XYBERCHAIN MAINNET - RAILWAY DEPLOYMENT"
 echo "=========================================="
-echo "🌐 Official XYBERCHAIN Blockchain"
-echo "⚡ Proof of Work (Ethash)"
-echo "💎 Native Currency: XYB"
-echo "🔗 Chain ID: 9194"
-echo ""
 
 # Railway environment
 PORT=${PORT:-8545}
 DATADIR="./mainnet-data"
 NETWORK_ID=9194
 
-# Use Railway environment password or default
-echo "${GETH_PASSWORD:-xyberchain-mainnet-railway-2024}" > password.txt
+# Create a stronger password file
+echo "${GETH_PASSWORD:-xyberchain-mainnet-railway-secure-2024}" > password.txt
 
 # Initialize if needed
 if [ ! -d "$DATADIR/geth" ]; then
@@ -32,11 +27,12 @@ fi
 echo "🚀 Starting XYBERCHAIN MAINNET..."
 echo "📡 RPC Port: $PORT"
 echo "🏭 Mining Address: 0x90f8bf6a479f320ead074411a4b0e7944ea8c9c1"
-echo "💰 Pre-funded Balance: 10,000 XYB"
-echo "⛏️  Mining: Enabled (1 thread)"
+echo "💰 Pre-funded Balance: 10,000+ XYB"
+echo "⛏️  Mining: Enabled"
+echo "🔓 Account: Auto-unlocked"
 echo ""
 
-# Start XYBERCHAIN with Railway-optimized settings
+# Start with enhanced unlock settings
 exec ./geth --datadir $DATADIR \
     --networkid $NETWORK_ID \
     --http \
@@ -44,7 +40,7 @@ exec ./geth --datadir $DATADIR \
     --http.port $PORT \
     --http.corsdomain "*" \
     --http.vhosts "*" \
-    --http.api "eth,net,web3,personal,admin,miner,txpool" \
+    --http.api "eth,net,web3,personal,admin,miner,txpool,debug" \
     --mine \
     --miner.threads 1 \
     --miner.etherbase "0x90f8bf6a479f320ead074411a4b0e7944ea8c9c1" \
@@ -55,4 +51,6 @@ exec ./geth --datadir $DATADIR \
     --verbosity 3 \
     --syncmode "full" \
     --cache 256 \
-    --nodiscover
+    --nodiscover \
+    --miner.gasprice 1000000000 \
+    --txpool.pricelimit 0
